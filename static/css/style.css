@@ -1,3 +1,11 @@
+/* === 字体加载 (国内可用 CDN) === */
+/* 英文: Plus Jakarta Sans */
+@import url('https://fonts.loli.net/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+/* 中文 UI: HarmonyOS Sans SC */
+@import url('https://cdn.jsdelivr.net/npm/harmonyos-sans-font@1.0.3/css/index.min.css');
+/* 轮播标题: 霞鹜文楷 */
+@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css');
+
 :root {
 	/*
 	 * 媒体库标题显示模式开关
@@ -6,21 +14,9 @@
 	 * "none"   = 完全隐藏
 	 */
 	--heicha-library-label-mode: always;
-}
 
-/* 全局字体优化 — 纯系统字体, 零网络开销 */
-body, .emby-input, .emby-textarea, .emby-select, button {
-	font-family:
-		"SF Pro Display", "SF Pro Text",          /* macOS */
-		-apple-system, BlinkMacSystemFont,        /* macOS fallback */
-		"Segoe UI", "Segoe UI Variable",          /* Windows */
-		"PingFang SC", "Hiragino Sans GB",        /* CJK macOS */
-		"Microsoft YaHei UI", "Microsoft YaHei",  /* CJK Windows */
-		"Noto Sans CJK SC", "Source Han Sans SC", /* CJK Linux */
-		system-ui, sans-serif !important;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-rendering: optimizeLegibility;
+	/* 全站字体 */
+	font-family: "Plus Jakarta Sans", "HarmonyOS Sans SC", system-ui, -apple-system, sans-serif !important;
 }
 
 ::-webkit-scrollbar {
@@ -276,6 +272,7 @@ body, .emby-input, .emby-textarea, .emby-select, button {
 
 .heicha-banner-info h1 {
 	color: #fff !important;
+	font-family: "LXGW WenKai", "Plus Jakarta Sans", "HarmonyOS Sans SC", sans-serif;
 	font-size: clamp(2rem, -.362rem + 6.75vw, 4.7rem);
 	font-weight: bolder;
 	margin: 0;
