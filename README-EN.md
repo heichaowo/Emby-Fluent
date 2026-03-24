@@ -21,7 +21,7 @@ _Emby Beautify Plugin — Carousel enhancement, glassmorphism labels, entry anim
 
 ## Animation Preview
 
-<https://github.com/user-attachments/assets/14b2fe00-1367-403d-94ca-551fdc1a060d>
+<https://user-images.githubusercontent.com/22045978/568278832-14b2fe00-1367-403d-94ca-551fdc1a060d.mp4>
 
 ## Usage Instructions
 
