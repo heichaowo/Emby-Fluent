@@ -149,7 +149,17 @@ class Home {
 			}
 			$(".misty-banner-body").append(itemHtml);
 			console.log(item.Id, detail);
+			// 标记真实幻灯片数量
+			this._realSlideCount = (this._realSlideCount || 0) + 1;
 		});
+
+		// 等待所有幻灯片追加完毕后, 克隆第一张作为幽灵幻灯片（无限滚动幻觉）
+		await CommonUtils.sleep(500);
+		const firstItem = $(".misty-banner-item").first();
+		if (firstItem.length) {
+			const cloneItem = firstItem.clone().addClass("misty-banner-clone").removeAttr("id");
+			$(".misty-banner-body").append(cloneItem);
+		}
 
 		// 只判断第一张海报加载完毕, 优化加载速度
 		await new Promise((resolve, reject) => {
@@ -192,22 +202,42 @@ class Home {
 		await CommonUtils.sleep(delay * 8 + 1000); // 等待媒体库动画完毕
 		$(".section0 > div").removeClass("misty-banner-library-overflow"); // 开启overflow 防止无法滚动
 
-		// 滚屏逻辑
+		// 滚屏逻辑（无限滚动幻觉）
 		var index = 0;
+		const realCount = this._realSlideCount || $(".misty-banner-item:not(.misty-banner-clone)").length;
 		clearInterval(this.bannerInterval);
 		this.bannerInterval = setInterval(() => {
 			// 背景切换
 			if (window.location.href.endsWith("home") && !document.hidden) {
-				index += index + 1 == $(".misty-banner-item").length ? -index : 1;
+				index++;
 				$(".misty-banner-body").css("left", -(index * 100).toString() + "%");
-				// 信息切换
-				$(".misty-banner-item.active").removeClass("active");
-				let id = $(".misty-banner-item").eq(index).addClass("active").attr("id");
-				// LOGO切换
-				$(".misty-banner-logo.active").removeClass("active");
-				$(`.misty-banner-logo[id=${id}]`).addClass("active");
+
+				if (index >= realCount) {
+					// 滑入克隆幻灯片（视觉上就是第一张）, 等 transition 结束后瞬间跳回真正的第一张
+					// 信息 & LOGO 切换到第一张
+					$(".misty-banner-item.active").removeClass("active");
+					let firstId = $(".misty-banner-item").eq(0).addClass("active").attr("id");
+					$(".misty-banner-logo.active").removeClass("active");
+					$(`.misty-banner-logo[id=${firstId}]`).addClass("active");
+
+					setTimeout(() => {
+						// 关闭过渡, 瞬间跳回位置0
+						$(".misty-banner-body").addClass("misty-banner-notransition");
+						$(".misty-banner-body").css("left", "0%");
+						// 强制回流后重新开启过渡
+						$(".misty-banner-body")[0].offsetHeight;
+						$(".misty-banner-body").removeClass("misty-banner-notransition");
+						index = 0;
+					}, 1600); // 等待 1.5s transition 完成 + 100ms 安全余量
+				} else {
+					// 正常切换
+					$(".misty-banner-item.active").removeClass("active");
+					let id = $(".misty-banner-item").eq(index).addClass("active").attr("id");
+					$(".misty-banner-logo.active").removeClass("active");
+					$(`.misty-banner-logo[id=${id}]`).addClass("active");
+				}
 			}
-		}, 8000);
+		}, 10000);
 	}
 
 	/* 初始事件 */

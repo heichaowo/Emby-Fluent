@@ -314,3 +314,7 @@
 .misty-banner-library-overflow {
 	overflow: visible !important;
 }
+
+.misty-banner-notransition {
+	transition: none !important;
+}
