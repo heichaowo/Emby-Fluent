@@ -5,7 +5,7 @@
 	 * "hover"  = 仅 hover 显示
 	 * "none"   = 完全隐藏
 	 */
-	--misty-library-label-mode: always;
+	--heicha-library-label-mode: always;
 }
 
 ::-webkit-scrollbar {
@@ -45,17 +45,16 @@
 	position: absolute;
 	bottom: 0;
 	left: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	display: block !important;
 	width: 100%;
-	padding: 0.6em 0.4em;
+	padding: 0.6em 0 !important;
 	background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 60%, transparent 100%);
 	-webkit-backdrop-filter: blur(12px) saturate(1.2);
 	backdrop-filter: blur(12px) saturate(1.2);
 	font-weight: 600;
 	font-size: 0.85em;
 	letter-spacing: 0.03em;
+	text-align: center !important;
 	border-radius: 0 0 0.3em 0.3em;
 	transform: translateY(0);
 	opacity: 0.6;
@@ -68,26 +67,30 @@
 	opacity: 1;
 }
 
+/* cardText 内按钮居中 */
+.view:not(.hide) .section0 .cardText .cardTextActionButton {
+	width: 100% !important;
+	text-align: center !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
 /* 模式: hover — 仅 hover 时显示 */
-:root[style*='--misty-library-label-mode: hover'] .view:not(.hide) .section0 .cardText,
-:root[style*='--misty-library-label-mode:hover'] .view:not(.hide) .section0 .cardText {
+:root[style*='--heicha-library-label-mode: hover'] .view:not(.hide) .section0 .cardText,
+:root[style*='--heicha-library-label-mode:hover'] .view:not(.hide) .section0 .cardText {
 	transform: translateY(100%);
 	opacity: 0;
 }
-:root[style*='--misty-library-label-mode: hover'] .view:not(.hide) .section0 .backdropCard:hover .cardText,
-:root[style*='--misty-library-label-mode:hover'] .view:not(.hide) .section0 .backdropCard:hover .cardText {
+:root[style*='--heicha-library-label-mode: hover'] .view:not(.hide) .section0 .backdropCard:hover .cardText,
+:root[style*='--heicha-library-label-mode:hover'] .view:not(.hide) .section0 .backdropCard:hover .cardText {
 	transform: translateY(0);
 	opacity: 1;
 }
 
 /* 模式: none — 完全隐藏 */
-:root[style*='--misty-library-label-mode: none'] .view:not(.hide) .section0 .cardText,
-:root[style*='--misty-library-label-mode:none'] .view:not(.hide) .section0 .cardText {
+:root[style*='--heicha-library-label-mode: none'] .view:not(.hide) .section0 .cardText,
+:root[style*='--heicha-library-label-mode:none'] .view:not(.hide) .section0 .cardText {
 	display: none;
-}
-
-.view:not(.hide) .section0 .cardText button {
-	text-decoration: none;
 }
 
 .view:not(.hide) .section0 .cardOverlayContainer {
@@ -130,12 +133,12 @@
 	backdrop-filter: blur(10px) !important;
 }
 
-.misty-banner {
+.heicha-banner {
 	position: relative;
 	overflow: hidden;
 }
 
-.misty-banner-cover {
+.heicha-banner-cover {
 	width: 100%;
 	max-height: 100vh;
 	user-select: none;
@@ -144,7 +147,7 @@
 	mask-image: linear-gradient(to top, transparent 0%, black 30%);
 }
 
-.misty-banner-logo {
+.heicha-banner-logo {
 	position: absolute;
 	user-select: none;
 	object-fit: contain;
@@ -157,12 +160,12 @@
 	transition-delay: .8s;
 }
 
-.misty-banner-logo.active {
+.heicha-banner-logo.active {
 	transform: translateY(calc(-100% - clamp(-2rem, -3.455rem + 7.27vw, 2rem)));
 	opacity: 1;
 }
 
-.misty-loading {
+.heicha-loading {
 	z-index: 99999999;
 	position: fixed;
 	top: 0;
@@ -176,7 +179,7 @@
 	flex-direction: column;
 }
 
-.misty-loading h1 {
+.heicha-loading h1 {
 	margin: 0;
 	margin-bottom: 3rem;
 	text-transform: uppercase;
@@ -185,21 +188,21 @@
 	opacity: 0;
 }
 
-.misty-loading h1.active {
+.heicha-loading h1.active {
 	transform: scale(1);
 	opacity: 1;
 }
 
-.misty-loading .mdl-spinner {
+.heicha-loading .mdl-spinner {
 	margin: 0;
 	position: initial;
 }
 
-.misty-loading .mdl-spinner__layer-1 {
+.heicha-loading .mdl-spinner__layer-1 {
 	border-color: #fff;
 }
 
-.misty-banner-library {
+.heicha-banner-library {
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -212,18 +215,18 @@
 	background-image: linear-gradient(90deg, rgba(0, 0, 0, .6), transparent);
 }
 
-.misty-banner-body {
+.heicha-banner-body {
 	display: flex;
 	position: relative;
 	left: 0;
 	transition: all 1.5s cubic-bezier(0.15, 0.07, 0, 1) 0s;
 }
 
-.misty-banner-item {
+.heicha-banner-item {
 	min-width: 100%;
 }
 
-.misty-banner-info {
+.heicha-banner-info {
 	width: 100%;
 	margin: min(.72em, max(.48em, 1.78vw));
 	margin-top: 0;
@@ -238,25 +241,25 @@
 	box-sizing: border-box;
 }
 
-.misty-banner-info > * {
+.heicha-banner-info > * {
 	transition: all 2.5s cubic-bezier(0, 1.41, 0.36, 0.93) .4s;
 	transform: translateY(150%);
 	opacity: 0 !important;
 }
 
-.misty-banner-item.active .misty-banner-info > * {
+.heicha-banner-item.active .heicha-banner-info > * {
 	transform: translateY(0);
 	opacity: 1 !important;
 }
 
-.misty-banner-info > div:nth-child(2) {
+.heicha-banner-info > div:nth-child(2) {
 	transition-delay: .6s;
 }
-.misty-banner-info > div:nth-child(3) {
+.heicha-banner-info > div:nth-child(3) {
 	transition-delay: .8s;
 }
 
-.misty-banner-info h1 {
+.heicha-banner-info h1 {
 	color: #fff !important;
 	font-size: clamp(2rem, -.362rem + 6.75vw, 4.7rem);
 	font-weight: bolder;
@@ -269,7 +272,7 @@
 	text-overflow: ellipsis;
 }
 
-.misty-banner-info p {
+.heicha-banner-info p {
 	color: #fff !important;
 	font-size: clamp(.6rem, .4rem + 1vw, 1.6rem);
 	font-weight: bold;
@@ -284,7 +287,7 @@
 	overflow: hidden;
 }
 
-.misty-banner-info button {
+.heicha-banner-info button {
 	cursor: pointer;
 	margin-top: clamp(0rem, -2.625rem + 7.5vw, 3rem);
 	width: 6em;
@@ -300,12 +303,12 @@
 	transition: .2s;
 }
 
-.misty-banner-info button:hover{
+.heicha-banner-info button:hover{
 	transform: scale(.95);
 }
 
 @media screen and (max-width: 62.5em) {
-	.misty-banner-info button {
+	.heicha-banner-info button {
 		position: absolute;
 		right: 2rem;
 		bottom: 2rem;
@@ -313,7 +316,7 @@
 }
 
 @media screen and (max-width: 35em) {
-	.misty-banner-info{
+	.heicha-banner-info{
 		height: auto;
 		bottom: 0;
 		top: unset;
@@ -327,7 +330,7 @@
 			transition-delay: 0s;
 		}
 	}
-	.misty-banner-logo 	{
+	.heicha-banner-logo 	{
 		display: none !important;
 	}
 
@@ -336,28 +339,28 @@
 	}
 }
 
-.misty-banner .backdropCard {
+.heicha-banner .backdropCard {
 	transition-duration: 0;
 	transform: translateY(80%);
 	opacity: 0;
 }
 
-.misty-banner-library-show {
+.heicha-banner-library-show {
 	transition-duration: 1.7s !important;
 	transform: translateY(0) !important;
 	opacity: 1 !important;
 }
 
-.misty-banner-library-overflow {
+.heicha-banner-library-overflow {
 	overflow: visible !important;
 }
 
-.misty-banner-notransition {
+.heicha-banner-notransition {
 	transition: none !important;
 }
 
 /* 轮播导航按钮 - 默认几乎隐藏, hover 显现 */
-.misty-banner-nav {
+.heicha-banner-nav {
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
@@ -377,18 +380,18 @@
 	align-items: center;
 	justify-content: center;
 }
-.misty-banner-nav:hover {
+.heicha-banner-nav:hover {
 	opacity: 0.8;
 	background: rgba(0, 0, 0, 0.5);
 }
-.misty-banner-prev {
+.heicha-banner-prev {
 	left: 1em;
 }
-.misty-banner-next {
+.heicha-banner-next {
 	right: 1em;
 }
 @media (max-width: 35em) {
-	.misty-banner-nav {
+	.heicha-banner-nav {
 		display: none;
 	}
 }

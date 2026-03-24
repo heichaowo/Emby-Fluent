@@ -1,11 +1,11 @@
-# Emby Crx
+# Emby 美化
 
 ## EN & CN
 
 - [简体中文](README.md)
 - [English](README-EN.md)
 
-_Emby 增强/美化 插件 (适用于 Chrome 内核浏览器)_
+_Emby 美化插件 — 轮播图增强、毛玻璃标签、入场动画 (适用于 Chrome 内核浏览器)_
 
 # 警告: 媒体库封面为原创设计, 未经授权请勿模仿使用
 
@@ -25,7 +25,7 @@ _Emby 增强/美化 插件 (适用于 Chrome 内核浏览器)_
 
 ## 使用须知
 
-媒体库标题显示模式可在 `static/css/style.css` 顶部的 `:root` 中切换 `--misty-library-label-mode`：
+媒体库标题显示模式可在 `static/css/style.css` 顶部的 `:root` 中切换 `--heicha-library-label-mode`：
 
 - `always` — 常驻半透明标签, hover 加亮 **(默认)**
 - `hover` — 仅鼠标悬浮时显示

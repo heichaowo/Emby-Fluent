@@ -1,11 +1,11 @@
-# Emby Crx
+# Emby Beautify
 
 ## EN & CN
 
 - [简体中文](README.md)
 - [English](README-EN.md)
 
-_Emby Enhancement/Beautification Plugin (for Chrome Core Browser)_
+_Emby Beautify Plugin — Carousel enhancement, glassmorphism labels, entry animations (for Chromium-based browsers)_
 
 # Warning: The media library cover is an original design. Please do not imitate it without authorization
 
@@ -25,7 +25,7 @@ _Emby Enhancement/Beautification Plugin (for Chrome Core Browser)_
 
 ## Usage Instructions
 
-Library label display mode can be toggled via `--misty-library-label-mode` in `:root` at the top of `static/css/style.css`:
+Library label display mode can be toggled via `--heicha-library-label-mode` in `:root` at the top of `static/css/style.css`:
 
 - `always` — Always visible at reduced opacity, brighter on hover **(default)**
 - `hover` — Only visible on mouse hover
