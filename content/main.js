@@ -1,11 +1,15 @@
 // 动态注入字体 (Chrome 扩展 CSS 不支持 @import 外部资源, 需通过 JS 注入)
 (function injectFonts() {
-	const fonts = [
-		'https://fonts.loli.net/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap',
-		'https://cdn.jsdelivr.net/npm/harmonyos-sans-font@1.0.3/css/index.min.css',
+	const fontLinks = [
+		// Plus Jakarta Sans — Google Fonts
+		'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap',
+		// HarmonyOS Sans SC — jsDelivr (预分片, 按需加载)
+		'https://cdn.jsdelivr.net/npm/harmonyos-sans-sc-webfont-splitted@1.1.0/dist/Regular.css',
+		'https://cdn.jsdelivr.net/npm/harmonyos-sans-sc-webfont-splitted@1.1.0/dist/Bold.css',
+		// 霞鹜文楷 — jsDelivr
 		'https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css',
 	];
-	fonts.forEach(href => {
+	fontLinks.forEach(href => {
 		const link = document.createElement('link');
 		link.rel = 'stylesheet';
 		link.href = href;
