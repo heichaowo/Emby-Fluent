@@ -1,11 +1,11 @@
-# Emby Beautify
+# Emby Fluent
 
 ## EN & CN
 
 - [简体中文](README.md)
 - [English](README-EN.md)
 
-_Emby Beautify Plugin — Carousel enhancement, glassmorphism labels, entry animations (for Chromium-based browsers)_
+_Emby Fluent Plugin — Carousel enhancement, glassmorphism labels, entry animations (for Chromium-based browsers)_
 
 # Warning: The media library cover is an original design. Please do not imitate it without authorization
 

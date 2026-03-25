@@ -1,10 +1,10 @@
 {
 	"manifest_version": 3,
-	"name": "Emby Beautify",
+	"name": "Emby Fluent",
 	"version": "2.0.0",
-	"description": "Emby 美化插件 — 轮播图、毛玻璃标签、入场动画",
+	"description": "Emby Fluent 插件 — 轮播图、毛玻璃标签、入场动画",
 	"author": "heichaowo",
-	"homepage_url": "https://github.com/heichaowo/emby-beautify",
+	"homepage_url": "https://github.com/heichaowo/emby-fluent",
 	"icons": {
 		"16": "static/img/icon.png",
 		"48": "static/img/icon.png",
@@ -12,7 +12,7 @@
 	},
 	"action": {
 		"default_icon": "static/img/icon.png",
-		"default_title": "Emby Beautify"
+		"default_title": "Emby Fluent"
 	},
 	"content_scripts": [
 		{
