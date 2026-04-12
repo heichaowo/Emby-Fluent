@@ -5,60 +5,153 @@
 - [简体中文](README.md)
 - [English](README-EN.md)
 
-_Emby Fluent Plugin — Carousel enhancement, glassmorphism labels, entry animations (for Chromium-based browsers)_
+_Emby Fluent — A modern UI enhancement extension for Emby, supporting Emby 4.8 / 4.9_
 
-# Warning: The media library cover is an original design. Please do not imitate it without authorization
+# ⚠️ Warning: Media library covers are original designs. Do not copy or use without authorization.
 
 ---
 
 ## Features
 
-- 🎠 **Seamless Carousel** — Homepage banner auto-rotates (10s interval) with clone-frame technique for seamless infinite looping
-- ◀▶ **Carousel Navigation** — Hidden prev/next buttons that appear on hover, with debounce protection for rapid clicks
-- 🪟 **Glassmorphism Library Labels** — Media library cards show a frosted glass title bar sliding up from the bottom on hover (`backdrop-filter: blur`), replacing the old full-overlay approach
-- 🎬 **Entry Animations** — Staggered card entrance animations and logo fade-in effects
-- 📦 **Dual Deployment** — Supports both Chrome Extension (Manifest V3) and server-side injection
+### 🎠 Homepage Banner Carousel
+
+- Auto-rotating latest media backdrops (10s interval)
+- Clone-frame technique for seamless infinite looping
+- Hidden prev/next navigation buttons, visible on hover with click debounce
+- **Smart Filtering**: Only selects items with both Backdrop + Logo for high-quality display
+- **HD Images**: `maxWidth: 3000` ensures high-resolution rendering
+- **Error Handling**: Auto-removes failed slides; graceful degradation when all fail
+
+### 🪟 Glassmorphism Library Labels
+
+- Frosted glass title bar at the bottom of media library cards (`backdrop-filter: blur`)
+- Flexbox-centered text alignment
+- Three display modes: `always` / `hover` / `none`
+
+### 🎬 Animations
+
+- Staggered card entrance animations
+- Logo fade-in effects
+- Card hover zoom (`scale(1.1)`)
+
+### 🔤 Curated Font Stack
+
+- **Plus Jakarta Sans** — Latin primary font (Google Fonts)
+- **HarmonyOS Sans SC** — CJK primary font (pre-split, on-demand loading)
+- **LXGW WenKai** — CJK serif alternative
+- **Smart CDN Fallback**: Global users via jsDelivr, China users auto-fallback to npmmirror
+
+### 📐 Layout Optimizations
+
+- Sidebar collapsed by default, doesn't occupy page space
+- Transparent gradient top navigation bar, blending into the banner
+- Ultra-thin scrollbar (0.3em)
+- Compatible with Emby 4.8 / 4.9 Flex layout differences
+
+### 📦 Dual Deployment
+
+- Chrome Extension (Manifest V3)
+- Server-side injection
+
+---
+
+## Compatibility
+
+| Emby Version | Status |
+|-------------|--------|
+| 4.8.x       | ✅ Fully supported |
+| 4.9.x       | ✅ Fully supported |
+
+| Browser | Minimum Version |
+|---------|----------------|
+| Chrome / Edge | 88+ (Manifest V3) |
+| Other Chromium-based | 88+ |
+
+---
 
 ## Animation Preview
 
 <https://user-images.githubusercontent.com/22045978/568278832-14b2fe00-1367-403d-94ca-551fdc1a060d.mp4>
 
-## Usage Instructions
+---
 
-Library label display mode can be toggled via `--heicha-library-label-mode` in `:root` at the top of `static/css/style.css`:
+## Configuration
 
-- `always` — Always visible at reduced opacity, brighter on hover **(default)**
-- `hover` — Only visible on mouse hover
-- `none` — Completely hidden
+Library label display mode can be toggled in `:root` at the top of `static/css/style.css`:
 
-## Usage Method
+```css
+:root {
+  --heicha-library-label-mode: always;  /* always | hover | none */
+}
+```
 
-**Two methods — only need to deploy one**
+| Value    | Effect                                    |
+|----------|-------------------------------------------|
+| `always` | Persistent semi-transparent label, brighter on hover (default) |
+| `hover`  | Only visible on mouse hover               |
+| `none`   | Completely hidden                         |
 
-> Plugin Version
+---
 
-_Requires users to load the extension (Chrome 88+ required for Manifest V3)_
+## Installation
 
-Chrome Extension Settings > Developer Mode > Load the unzipped extension > Select the source code directly
+**Two methods — only one is needed**
 
-> Server Version
+### Extension Version
 
-_No need to use plugins, deploy directly to the server, users can use it seamlessly_
+_Requires Chrome 88+ with Manifest V3 support_
 
-    # Docker Version (If the script is updated, just re-execute)
-    # Note: You need to have access to Github. If you don't understand, please leave a message in the group
-    # EmbyServer is the container name. If your container name is not this, please change it to the correct one!
-    # Reference tutorial (unofficial): https://mj.tk/2023/07/Emby
-    docker exec EmbyServer /bin/sh -c 'cd /system/dashboard-ui && wget -O - https://tinyurl.com/2p97xcpd | sh'
+1. Open Chrome Extensions Settings → Enable **Developer Mode**
+2. Click **Load unpacked**
+3. Select the project source directory
 
-    # Normal version
-    # Reference tutorial (unofficial): https://cangshui.net/5167.html
+### Server Version
+
+_No extension needed, deploy directly to the server for seamless use_
+
+```bash
+# Docker Version (re-execute if the script is updated)
+# EmbyServer is the container name — change it if yours is different
+docker exec EmbyServer /bin/sh -c 'cd /system/dashboard-ui && wget -O - https://tinyurl.com/2p97xcpd | sh'
+
+# Reference tutorial (unofficial): https://cangshui.net/5167.html
+```
+
+> **Note**: Docker version requires network access to GitHub
+
+---
+
+## Project Structure
+
+```
+Emby-Fluent/
+├── manifest.json          # Chrome extension config (Manifest V3)
+├── content/
+│   └── main.js            # Core logic: banner carousel, font injection, DOM adaptation
+├── static/
+│   ├── css/
+│   │   └── style.css      # All styles: layout, animations, glassmorphism, sidebar
+│   ├── js/
+│   │   ├── jquery-3.6.0.min.js
+│   │   ├── common-utils.js
+│   │   └── md5.min.js
+│   └── img/
+│       └── icon.png
+├── script.sh              # Server-side deployment script
+└── README.md
+```
 
 ---
 
 ## TODO
 
-- Encapsulate as a single JS/CSS for client use
-- Playback jump to third-party player function
-- Online version detection and update
-- Provide an custom Docker image (auto-built via GitHub Actions)
+- [ ] Bundle as single JS/CSS for direct client use
+- [ ] Playback redirect to third-party player
+- [ ] Online version detection and updates
+- [ ] Custom Docker image via GitHub Actions auto-build
+
+---
+
+## License
+
+[MIT](LICENSE)

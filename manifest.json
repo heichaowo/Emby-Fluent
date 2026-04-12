@@ -1,8 +1,9 @@
 {
 	"manifest_version": 3,
 	"name": "Emby Fluent",
-	"version": "2.0.0",
-	"description": "Emby Fluent 插件 — 轮播图、毛玻璃标签、入场动画",
+	"version": "2026.4.13",
+	"version_name": "v2026.4.13",
+	"description": "Emby Fluent — 为 Emby 打造的现代化 UI 增强扩展，支持 Emby 4.8 / 4.9",
 	"author": "heichaowo",
 	"homepage_url": "https://github.com/heichaowo/emby-fluent",
 	"icons": {
@@ -16,13 +17,23 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["<all_urls>"],
-			"css": ["static/css/style.css"],
-			"js": ["static/js/jquery-3.6.0.min.js", "static/js/common-utils.js", "static/js/md5.min.js", "content/main.js"],
+			"matches": [
+				"<all_urls>"
+			],
+			"css": [
+				"static/css/style.css"
+			],
+			"js": [
+				"static/js/jquery-3.6.0.min.js",
+				"static/js/common-utils.js",
+				"static/js/md5.min.js",
+				"content/main.js"
+			],
 			"run_at": "document_end",
 			"world": "MAIN"
 		}
 	],
-	"host_permissions": ["<all_urls>"]
+	"host_permissions": [
+		"<all_urls>"
+	]
 }
-

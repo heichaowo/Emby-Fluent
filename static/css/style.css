@@ -21,6 +21,31 @@
 	zoom: .5;
 }
 
+/* === 侧边栏: 禁用 docked 模式, 始终作为浮层 === */
+/* 防止 docked 侧边栏推移内容区域 */
+.withDrawerOpen,
+.mainDrawer-docked,
+body.bodyWithPopupOpen-withDrawer {
+	left: 0 !important;
+	margin-left: 0 !important;
+	padding-left: 0 !important;
+}
+
+.withDrawerOpen .skinHeader {
+	left: 0 !important;
+}
+
+/* docked 状态下也作为浮层显示 (fixed + 不推移) */
+.mainDrawer.drawer-docked {
+	position: fixed !important;
+	z-index: 999 !important;
+}
+
+/* 默认关闭 — 未 drawer-open 时隐藏 */
+.mainDrawer:not(.drawer-open) {
+	transform: translateX(-100%) !important;
+}
+
 .skinHeader-withBackground {
 	right: 0 !important;
 	background-image: linear-gradient(rgba(0,0,0,.5), transparent);
@@ -50,7 +75,9 @@
 	position: absolute;
 	bottom: 0;
 	left: 0;
-	display: block !important;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
 	padding: 0.6em 0 !important;
 	background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 60%, transparent 100%);
@@ -140,14 +167,19 @@
 
 .heicha-banner {
 	position: relative;
-	overflow: hidden;
+	overflow: hidden !important;
+	display: block !important;
+	height: auto !important;
+	flex-shrink: 0 !important;
 }
 
 .heicha-banner-cover {
 	width: 100%;
+	height: auto !important;
 	max-height: 100vh;
 	user-select: none;
 	object-fit: cover;
+	display: block;
 	-webkit-mask-image: linear-gradient(to top, transparent 0%, black 30%);
 	mask-image: linear-gradient(to top, transparent 0%, black 30%);
 }
@@ -229,6 +261,8 @@
 
 .heicha-banner-item {
 	min-width: 100%;
+	position: relative;
+	overflow: hidden;
 }
 
 .heicha-banner-info {
@@ -239,11 +273,11 @@
 	top: 0;
 	z-index: 1;
 	height: 100%;
-	height: -webkit-fill-available;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	box-sizing: border-box;
+	overflow: hidden;
 }
 
 .heicha-banner-info > * {

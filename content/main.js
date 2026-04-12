@@ -1,29 +1,61 @@
 // 动态注入字体 (Chrome 扩展 CSS 不支持 @import 外部资源, 需通过 JS 注入)
+// 仅在 Emby 页面上注入, 避免在无关网站触发 CSP 错误
 (function injectFonts() {
-	const fontLinks = [
-		// Plus Jakarta Sans — Google Fonts
-		'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap',
-		// HarmonyOS Sans SC — jsDelivr (预分片, 按需加载)
-		'https://cdn.jsdelivr.net/npm/harmonyos-sans-sc-webfont-splitted@1.1.0/dist/Regular.css',
-		'https://cdn.jsdelivr.net/npm/harmonyos-sans-sc-webfont-splitted@1.1.0/dist/Bold.css',
-		// 霞鹜文楷 — jsDelivr
-		'https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css',
-	];
-	fontLinks.forEach(href => {
+	const isEmby = document.querySelector('meta[name="application-name"][content="Emby"]')
+		|| document.title.includes('Emby')
+		|| window.location.pathname.includes('/web/index.html');
+	if (!isEmby) return;
+
+	/**
+	 * 加载样式表, 支持 CDN 降级回退.
+	 * @param {string} primary - 主 CDN 地址 (全球)
+	 * @param {string} [fallback] - 备用 CDN 地址 (国内镜像)
+	 */
+	const loadCSS = (primary, fallback) => {
 		const link = document.createElement('link');
 		link.rel = 'stylesheet';
-		link.href = href;
+		link.href = primary;
+		if (fallback) {
+			link.onerror = () => {
+				console.log(`[Emby-Fluent] CDN fallback: ${primary} → ${fallback}`);
+				link.remove();
+				const fb = document.createElement('link');
+				fb.rel = 'stylesheet';
+				fb.href = fallback;
+				document.head.appendChild(fb);
+			};
+		}
 		document.head.appendChild(link);
-	});
+	};
+
+	// Plus Jakarta Sans — Google Fonts (全球可用)
+	loadCSS('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+	// HarmonyOS Sans SC — jsDelivr → npmmirror 回退
+	loadCSS(
+		'https://cdn.jsdelivr.net/npm/harmonyos-sans-sc-webfont-splitted@1.1.0/dist/Regular.css',
+		'https://registry.npmmirror.com/harmonyos-sans-sc-webfont-splitted/1.1.0/files/dist/Regular.css'
+	);
+	loadCSS(
+		'https://cdn.jsdelivr.net/npm/harmonyos-sans-sc-webfont-splitted@1.1.0/dist/Bold.css',
+		'https://registry.npmmirror.com/harmonyos-sans-sc-webfont-splitted/1.1.0/files/dist/Bold.css'
+	);
+
+	// 霞鹜文楷 — jsDelivr → npmmirror 回退
+	loadCSS(
+		'https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css',
+		'https://registry.npmmirror.com/lxgw-wenkai-webfont/1.7.0/files/style.css'
+	);
 })();
 
 class Home {
 	static start() {
+		console.log('[Emby-Fluent] Home.start() called');
 		this.cache = {
 			items: undefined,
 			item: new Map(),
 		};
-		this.itemQuery = { ImageTypes: "Backdrop", EnableImageTypes: "Logo,Backdrop", IncludeItemTypes: "Movie,Series", SortBy: "ProductionYear, PremiereDate, SortName", Recursive: true, ImageTypeLimit: 1, Limit: 10, Fields: "ProductionYear", SortOrder: "Descending", EnableUserData: false, EnableTotalRecordCount: false };
+		this.itemQuery = { ImageTypes: "Backdrop,Logo", EnableImageTypes: "Logo,Backdrop", IncludeItemTypes: "Movie,Series", SortBy: "ProductionYear, PremiereDate, SortName", Recursive: true, ImageTypeLimit: 1, Limit: 10, Fields: "ProductionYear", SortOrder: "Descending", EnableUserData: false, EnableTotalRecordCount: false };
 		this.coverOptions = { type: "Backdrop", maxWidth: 3000 };
 		this.logoOptions = { type: "Logo", maxWidth: 3000 };
 		this.initStart = false;
@@ -35,6 +67,14 @@ class Home {
 				}
 				if ($(".hide .heicha-banner").length != 0) {
 					$(".hide .heicha-banner").remove();
+				}
+				// v4.9 compat: .section0 不存在时, 将第一个可见 verticalSection 标记为 section0
+				if ($(".section0").length == 0) {
+					const $vs = $(".view:not(.hide) .homeSectionsContainer .verticalSection:not(.hide)").first();
+					if ($vs.length > 0) {
+						$vs.addClass("section0");
+						console.log('[Emby-Fluent] v4.9 compat: tagged verticalSection as section0');
+					}
 				}
 				if (!this.initStart && $(".section0 .card").length != 0 && $(".view:not(.hide) .heicha-banner").length == 0) {
 					this.initStart = true;
@@ -175,15 +215,40 @@ class Home {
 			$(".heicha-banner-body").append(itemHtml);
 		}
 
-		// 只判断第一张海报加载完毕, 优化加载速度
-		await new Promise((resolve, reject) => {
-			let waitLoading = setInterval(() => {
-				if (document.querySelector(".heicha-banner-cover")?.complete) {
-					clearInterval(waitLoading);
-					resolve();
-				}
-			}, 16);
+		// 等待所有图片加载完毕 (成功或失败), 10s 超时
+		await new Promise((resolve) => {
+			const check = () => {
+				const covers = document.querySelectorAll('.heicha-banner-cover');
+				if (covers.length === 0) { resolve(); return; }
+				const allComplete = Array.from(covers).every(img => img.complete);
+				if (allComplete) { resolve(); return; }
+			};
+			const interval = setInterval(check, 50);
+			setTimeout(() => { clearInterval(interval); resolve(); }, 10000);
+			check();
 		});
+
+		// 移除加载失败的幻灯片 (Backdrop 500 等)
+		$(".heicha-banner-cover").each((i, img) => {
+			if (img.complete && img.naturalHeight === 0) {
+				const $item = $(img).closest('.heicha-banner-item');
+				const itemId = $item.attr('id');
+				$item.remove();
+				if (itemId) $(`.heicha-banner-logo[id="${itemId}"]`).remove();
+				console.warn(`[Emby-Fluent] Removed failed slide: ${itemId}`);
+			}
+		});
+
+		const remainingSlides = $(".heicha-banner-item").length;
+		console.log(`[Emby-Fluent] Slides remaining after cleanup: ${remainingSlides}`);
+
+		// 如果所有图片都失败, 跳过 Banner 逻辑
+		if (remainingSlides === 0) {
+			console.warn('[Emby-Fluent] All backdrop images failed, skipping banner');
+			$(".heicha-banner").remove();
+			$(".heicha-loading").fadeOut(500, () => $(".heicha-loading").remove());
+			return;
+		}
 
 		// 克隆第一张作为幽灵幻灯片（无限滚动幻觉）, 放在图片加载后确保 slide 已存在
 		const firstItem = $(".heicha-banner-item").first();
@@ -193,25 +258,29 @@ class Home {
 			$(".heicha-banner-body").append(cloneItem);
 		}
 
-		// 判断section0加载完毕
-		await new Promise((resolve, reject) => {
+		// 判断section0加载完毕 (15s 超时保护)
+		await new Promise((resolve) => {
 			let waitsection0 = setInterval(() => {
 				if ($(".view:not(.hide) .section0 .emby-scrollbuttons").length > 0 && $(".view:not(.hide) .section0.hide").length == 0) {
 					clearInterval(waitsection0);
 					resolve();
 				}
 			}, 16);
+			setTimeout(() => { clearInterval(waitsection0); resolve(); }, 15000);
 		});
 
 		$(".view:not(.hide) .section0 .emby-scrollbuttons").remove();
-		const items = $(".view:not(.hide) .section0 .emby-scroller .itemsContainer")[0].items;
+		const itemsEl = $(".view:not(.hide) .section0 .emby-scroller .itemsContainer")[0];
+		const items = itemsEl?.items;
+		if (!itemsEl) console.warn("[Emby-Fluent] section0 itemsContainer not found, library items binding skipped");
 		if (CommonUtils.checkType() === 'pc') {
 			$(".view:not(.hide) .section0").detach().appendTo(".view:not(.hide) .heicha-banner-library");
 		}
 
 		$(".heicha-loading").fadeOut(500, () => $(".heicha-loading").remove());
 		await CommonUtils.sleep(150);
-		$(".view:not(.hide) .section0 .emby-scroller .itemsContainer")[0].items = items;
+		const itemsEl2 = $(".view:not(.hide) .section0 .emby-scroller .itemsContainer")[0];
+		if (itemsEl2 && items) itemsEl2.items = items;
 
 		// 置入场动画
 		let delay = 80; // 动媒体库画间隔
@@ -365,6 +434,11 @@ class Home {
 }
 
 // 运行
+console.log('[Emby-Fluent] Entry check:', {
+	meta: $("meta[name=application-name]").attr("content"),
+	accentEmby: $(".accent-emby").length,
+	hasBroadcast: "BroadcastChannel" in window,
+});
 if ("BroadcastChannel" in window || "postMessage" in window) {
 	if ($("meta[name=application-name]").attr("content") == "Emby" || $(".accent-emby") != undefined) {
 		Home.start();
