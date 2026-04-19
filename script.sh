@@ -3,6 +3,9 @@
 # Emby Fluent 服务端安装脚本
 # 在 Emby 的 web 目录下执行此脚本
 
+# 清理旧版 emby-crx 目录及 index.html 中的旧注入标记
+rm -rf emby-crx
+sed -i 's|.*emby-crx.*||g' index.html 2>/dev/null || true
 rm -rf emby-fluent
 mkdir -p emby-fluent
 wget https://raw.githubusercontent.com/heichaowo/emby-fluent/main/static/css/style.css -P emby-fluent/
