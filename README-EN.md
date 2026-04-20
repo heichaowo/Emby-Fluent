@@ -5,7 +5,7 @@
 - [简体中文](README.md)
 - [English](README-EN.md)
 
-_Emby Fluent — A modern UI enhancement extension for Emby, supporting Emby 4.8 / 4.9_
+_Emby Fluent — A modern UI enhancement extension for Emby, supporting Emby 4.8.x / 4.9.x_
 
 # ⚠️ Warning: Media library covers are original designs. Do not copy or use without authorization.
 
@@ -46,7 +46,7 @@ _Emby Fluent — A modern UI enhancement extension for Emby, supporting Emby 4.8
 - Sidebar collapsed by default, doesn't occupy page space
 - Transparent gradient top navigation bar, blending into the banner
 - Ultra-thin scrollbar (0.3em)
-- Compatible with Emby 4.8 / 4.9 Flex layout differences
+- Compatible with Emby 4.8.x / 4.9.x Flex layout differences
 
 ### 📦 Dual Deployment
 

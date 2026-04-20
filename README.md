@@ -5,7 +5,7 @@
 - [简体中文](README.md)
 - [English](README-EN.md)
 
-_Emby Fluent — 为 Emby 打造的现代化 UI 增强扩展，支持 Emby 4.8 / 4.9_
+_Emby Fluent — 为 Emby 打造的现代化 UI 增强扩展，支持 Emby 4.8.x / 4.9.x_
 
 # ⚠️ 警告: 媒体库封面为原创设计, 未经授权请勿模仿使用
 
@@ -46,7 +46,7 @@ _Emby Fluent — 为 Emby 打造的现代化 UI 增强扩展，支持 Emby 4.8 /
 - 侧边栏默认收起，不占据页面空间
 - 顶部导航栏透明渐变，融入 Banner
 - 超细滚动条（0.3em）
-- 兼容 Emby 4.8 / 4.9 的 Flex 布局差异
+- 兼容 Emby 4.8.x / 4.9.x 的 Flex 布局差异
 
 ### 📦 双模部署
 
