@@ -1,8 +1,8 @@
 {
 	"manifest_version": 3,
 	"name": "Emby Fluent",
-	"version": "2026.4.13",
-	"version_name": "v2026.4.13",
+	"version": "2026.4.19",
+	"version_name": "v2026.4.19",
 	"description": "Emby Fluent — 为 Emby 打造的现代化 UI 增强扩展，支持 Emby 4.8 / 4.9",
 	"author": "heichaowo",
 	"homepage_url": "https://github.com/heichaowo/emby-fluent",
