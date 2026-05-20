@@ -207,12 +207,13 @@ class Home {
 				</div>
 			</div>
 			`;
-			if (detail.ImageTags && detail.ImageTags.Logo) {
-				$(".heicha-banner-logos").append(`
-				<img id="${detail.Id}" draggable="false" loading="auto" decoding="lazy" class="heicha-banner-logo" data-banner="img-title" alt="Logo" src="${logoUrl}">
-				`);
-			}
 			$(".heicha-banner-body").append(itemHtml);
+			// Logo 嵌入左侧信息区 (替代 h1 文字标题)
+			if (detail.ImageTags && detail.ImageTags.Logo) {
+				const $info = $(".heicha-banner-body .heicha-banner-item").last().find(".heicha-banner-info");
+				$info.addClass("has-logo");
+				$info.prepend(`<img draggable="false" loading="auto" decoding="lazy" class="heicha-banner-title-logo" alt="Logo" src="${logoUrl}">`);
+			}
 		}
 
 		// 等待所有图片加载完毕 (成功或失败), 10s 超时
@@ -285,7 +286,6 @@ class Home {
 		// 置入场动画
 		let delay = 80; // 动媒体库画间隔
 		let id = $(".heicha-banner-item").eq(0).addClass("active").attr("id"); // 初次信息动画
-		$(`.heicha-banner-logo[id=${id}]`).addClass("active");
 
 		await CommonUtils.sleep(200); // 间隔动画
 		$(".section0 > div").addClass("heicha-banner-library-overflow"); // 关闭overflow 防止媒体库动画溢出
@@ -308,11 +308,9 @@ class Home {
 
 					if (index >= realCount) {
 						// 滑入克隆幻灯片（视觉上就是第一张）, 等 transition 结束后瞬间跳回真正的第一张
-						// 信息 & LOGO 切换到第一张
+						// 信息 & LOGO 随 slide 切换, 无需单独处理
 						$(".heicha-banner-item.active").removeClass("active");
-						let firstId = $(".heicha-banner-item").eq(0).addClass("active").attr("id");
-						$(".heicha-banner-logo.active").removeClass("active");
-						$(`.heicha-banner-logo[id=${firstId}]`).addClass("active");
+						$(".heicha-banner-item").eq(0).addClass("active");
 
 						// 暂停定时器, 防止 reset 期间再次触发
 						clearInterval(this.bannerInterval);
@@ -330,9 +328,7 @@ class Home {
 					} else {
 						// 正常切换
 						$(".heicha-banner-item.active").removeClass("active");
-						let id = $(".heicha-banner-item").eq(index).addClass("active").attr("id");
-						$(".heicha-banner-logo.active").removeClass("active");
-						$(`.heicha-banner-logo[id=${id}]`).addClass("active");
+						$(".heicha-banner-item").eq(index).addClass("active");
 					}
 				}
 			}, 10000);
@@ -346,9 +342,7 @@ class Home {
 			index = targetIndex;
 			$body.css("left", -(index * 100).toString() + "%");
 			$(".heicha-banner-item.active").removeClass("active");
-			let id = $(".heicha-banner-item").eq(index).addClass("active").attr("id");
-			$(".heicha-banner-logo.active").removeClass("active");
-			$(`.heicha-banner-logo[id=${id}]`).addClass("active");
+			$(".heicha-banner-item").eq(index).addClass("active");
 			startCarousel();
 		};
 
@@ -359,11 +353,9 @@ class Home {
 			clearInterval(this.bannerInterval);
 			index = realCount; // 滑入克隆 slide
 			$body.css("left", -(index * 100).toString() + "%");
-			// 信息 & LOGO 切换到第一张
+			// 信息 & LOGO 随 slide 切换
 			$(".heicha-banner-item.active").removeClass("active");
-			let firstId = $(".heicha-banner-item").eq(0).addClass("active").attr("id");
-			$(".heicha-banner-logo.active").removeClass("active");
-			$(`.heicha-banner-logo[id=${firstId}]`).addClass("active");
+			$(".heicha-banner-item").eq(0).addClass("active");
 			setTimeout(() => {
 				$body.addClass("heicha-banner-notransition");
 				$body.css("left", "0%");
@@ -389,9 +381,7 @@ class Home {
 			index = realCount - 1;
 			$body.css("left", -(index * 100).toString() + "%");
 			$(".heicha-banner-item.active").removeClass("active");
-			let id = $(".heicha-banner-item").eq(index).addClass("active").attr("id");
-			$(".heicha-banner-logo.active").removeClass("active");
-			$(`.heicha-banner-logo[id=${id}]`).addClass("active");
+			$(".heicha-banner-item").eq(index).addClass("active");
 			isWrapping = false;
 			startCarousel();
 		};

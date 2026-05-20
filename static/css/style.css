@@ -165,6 +165,13 @@ body.bodyWithPopupOpen-withDrawer {
 	backdrop-filter: blur(10px) !important;
 }
 
+/* 首页视口高度约束: 消除滚动条和底部空白 */
+.view[data-type=home]:not(.hide) {
+	height: 100vh;
+	height: 100dvh;
+	overflow: hidden;
+}
+
 .heicha-banner {
 	position: relative;
 	overflow: hidden !important;
@@ -200,6 +207,16 @@ body.bodyWithPopupOpen-withDrawer {
 .heicha-banner-logo.active {
 	transform: translateY(calc(-100% - clamp(-2rem, -3.455rem + 7.27vw, 2rem)));
 	opacity: 1;
+}
+
+/* 左侧信息区内嵌 Logo (替代 h1 文字标题) */
+.heicha-banner-title-logo {
+	user-select: none;
+	object-fit: contain;
+	object-position: left center;
+	max-height: clamp(2.5rem, 1rem + 5vw, 5rem);
+	max-width: 60%;
+	display: block;
 }
 
 .heicha-loading {
@@ -310,6 +327,11 @@ body.bodyWithPopupOpen-withDrawer {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+/* 有 Logo 时隐藏 h1 文字标题 */
+.heicha-banner-info.has-logo h1 {
+	display: none;
 }
 
 .heicha-banner-info p {
