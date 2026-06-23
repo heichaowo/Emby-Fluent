@@ -13,11 +13,11 @@ sed -i '/emby-fluent/d' index.html 2>/dev/null || true
 
 # 2. 下载文件
 mkdir -p emby-fluent
-wget -q https://raw.githubusercontent.com/heichaowo/Emby-Fluent/main/static/css/style.css -P emby-fluent/
-wget -q https://raw.githubusercontent.com/heichaowo/Emby-Fluent/main/static/js/common-utils.js -P emby-fluent/
-wget -q https://raw.githubusercontent.com/heichaowo/Emby-Fluent/main/static/js/jquery-3.6.0.min.js -P emby-fluent/
-wget -q https://raw.githubusercontent.com/heichaowo/Emby-Fluent/main/static/js/md5.min.js -P emby-fluent/
-wget -q https://raw.githubusercontent.com/heichaowo/Emby-Fluent/main/content/main.js -P emby-fluent/
+wget -q https://raw.githubusercontent.com/heichaowo/Emby-Fluent/beta/static/css/style.css -P emby-fluent/
+wget -q https://raw.githubusercontent.com/heichaowo/Emby-Fluent/beta/static/js/common-utils.js -P emby-fluent/
+wget -q https://raw.githubusercontent.com/heichaowo/Emby-Fluent/beta/static/js/jquery-3.6.0.min.js -P emby-fluent/
+wget -q https://raw.githubusercontent.com/heichaowo/Emby-Fluent/beta/static/js/md5.min.js -P emby-fluent/
+wget -q https://raw.githubusercontent.com/heichaowo/Emby-Fluent/beta/content/main.js -P emby-fluent/
 echo "Files downloaded."
 
 # 3. 检查 index.html 是否存在且非空
@@ -33,7 +33,7 @@ code='<link rel="stylesheet" id="theme-css" href="emby-fluent/style.css" type="t
 if grep -q "emby-fluent" index.html; then
     echo "Already injected, skipping."
 elif grep -q "</head>" index.html; then
-    sed -i.bak "s|</head>|${code}</head>|" index.html
+    sed -i.bak "s|</head>|${code}\n</head>|" index.html
     echo "Emby Fluent injected successfully."
 else
     echo "Error: </head> tag not found in index.html. Emby may not be fully initialized."
